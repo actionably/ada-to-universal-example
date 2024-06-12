@@ -71,5 +71,5 @@ const sendToDashbot = async (universalData) => {
   }
 }
 
-// Change the parameter to true if you want to test the Dashbot integration with hardcoded sample data
-await handleAdaToUniveralConversion(false)
+// Change the parameter to false if you want to test with live data.  You will need to fill in your own Ada API information.
+await handleAdaToUniveralConversion(true)
