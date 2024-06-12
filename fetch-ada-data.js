@@ -1,10 +1,36 @@
+const ADA_API_URL_PREFIX = 'ADA_URL_HERE'
+const ADA_API_ACCESS_TOKEN = 'ADA_ACCESS_TOKEN_HERE'
+
+/**
+ * Fetches messages from the Ada API using the provided access token and URL prefix.  This function will only work with
+ * an actual ADA token and url so you will need to sign up for an Ada account to get this to work.
+ *
+ * @returns {Promise} A promise that resolves with the data from the Ada API or rejects with an error message.
+ */
+const fetchAdaMessagesFromAdaAPI = async () => {
+  const createdSinceTimestamp = new Date(2024, 1, 0) // January 1st, 2024
+  const response = await fetch(`${ADA_API_URL_PREFIX}messages?created_since=${createdSinceTimestamp.toISOString()}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${ADA_API_ACCESS_TOKEN}`,
+    }
+  })
+
+  const res = await response.json()
+  if (res.message === 'OK') { // Yay, we got a response!
+    return res.data
+  } else { // Something went wrong!
+    throw new Error("Failed to fetch messages from Ada API!")
+  }
+}
+
 /**
  * Normally, this would be a fetch request to the Ada API, a database, or some kind of triggered event.  In this case,
  *   we are simply going to return an array of some messages in the ADA format for illustrative purposes.
  *
  * This data is pulled verbatim from the Ada documentation, found here: https://developers.ada.cx/reference/data-export-message-object
  */
-const fetchAdaMessages = () => {
+const fetchStaticAdaMessages = () => {
   return {
     "data": [
       {
@@ -166,4 +192,4 @@ const fetchAdaMessages = () => {
   }
 }
 
-export { fetchAdaMessages }
+export { fetchStaticAdaMessages, fetchAdaMessagesFromAdaAPI }

@@ -1,4 +1,4 @@
-import { fetchAdaMessages } from "./fetch-ada-data.js";
+import { fetchAdaMessagesFromAdaAPI, fetchStaticAdaMessages } from "./fetch-ada-data.js";
 
 const DASHBOT_API_KEY = 'API_KEY_HERE'
 const TRACKER_URL_PREFIX = 'https://tracker.dashbot.io/track?platform=universal&v=10.1.1-rest'
@@ -10,9 +10,14 @@ const TRACKER_URL_PREFIX = 'https://tracker.dashbot.io/track?platform=universal&
  * -- Converts to Dashbot's Universal format
  * -- Sends to Dashbot via their message tracker endpoint for data ingestion
  */
-const handleAdaToUniveralConversion = async () => {
+const handleAdaToUniveralConversion = async (shouldUseExampleData) => {
   // Fetch messages from Ada
-  const adaMessages = fetchAdaMessages()
+  let adaMessages
+  if (shouldUseExampleData) {
+    adaMessages = fetchStaticAdaMessages()
+  } else {
+    adaMessages = await fetchAdaMessagesFromAdaAPI()
+  }
   const messageDataArray = adaMessages.data
 
   // Convert to the Dashbot Univeral format
@@ -66,4 +71,5 @@ const sendToDashbot = async (universalData) => {
   }
 }
 
-await handleAdaToUniveralConversion()
+// Change the parameter to true if you want to test the Dashbot integration with hardcoded sample data
+await handleAdaToUniveralConversion(false)
